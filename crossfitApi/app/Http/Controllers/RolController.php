@@ -22,14 +22,6 @@ class RolController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -54,17 +46,40 @@ class RolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rol $rol)
+    public function show($id)
     {
-        //
+        $resultResponse = new ResultResponse();
+        try {
+            $rol = Rol::findOrFail($id);
+            $resultResponse->setData($rol);
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+        }
+        return response()->json($resultResponse);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rol $rol)
+    public function put(Request $request, $id)
     {
-        //
+        $resultResponse = new ResultResponse();
+        try {
+            $rol = Rol::findOrFail($id);
+            $rol->rl_nombre = $request->get('rl_nombre', $rol->rl_nombre);
+            $rol->rl_descripcion = $request->get('rl_descripcion', $rol->rl_descripcion);
+            $rol->save();
+            $resultResponse->setData($rol);
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+        }
+        return response()->json($resultResponse);
     }
 
     /**
