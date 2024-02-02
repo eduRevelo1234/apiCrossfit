@@ -1,13 +1,16 @@
 <?php
 namespace App\Libs;
+
 class ResultResponse
 {
     const SUCCESS_CODE = 200;
     const ERROR_CODE = 300;
     const ERROR_ELEMENT_NOT_FOUND_CODE = 404;
+    const ERROR_BAD_REQUEST = 400;
     const TXT_SUCCESS_CODE = 'Success';
     const TXT_ERROR_CODE = 'Error';
-    const TXT_ERROR_ELEMEN_NOT_FOUND_CODE = 'Element not found';
+    const TXT_ERROR_ELEMENT_NOT_FOUND_CODE = 'Element not found';
+    const TXT_ERROR_BAD_REQUEST = 'Bad request';
     public $statusCode;
     public $message;
     public $data;

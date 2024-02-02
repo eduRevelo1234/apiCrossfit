@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 
-class PlanController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $plan = Plan::all();
+        $result = Payment::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($plan);
+        $resultResponse->setData($result);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -28,15 +28,16 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $newPlan = new Plan([
-                'pl_nombre' => $request->get('pl_nombre'),
-                'pl_numero_clase' => $request->get('pl_numero_clase'),
-                'pl_estado' => $request->get('pl_estado'),
-                'pl_costo_inscripcion' => $request->get('pl_costo_inscripcion'),
-                'pl_costo_mensual' => $request->get('pl_costo_mensual'),
+            $newPayment = new Payment([
+                'pg_nombre' => $request->get('pg_nombre'),
+                'pg_tipo' => $request->get('pg_tipo'),
+                'pg_fecha' => $request->get('pg_fecha'),
+                'pg_resplado' => $request->get('pg_resplado'),
+                'pg_monto' => $request->get('pg_monto'),
+                'pg_sc_codigo' => $request->get('pg_sc_codigo'),
             ]);
-            $newPlan->save();
-            $resultResponse->setData($newPlan);
+            $newPayment->save();
+            $resultResponse->setData($newPayment);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -53,8 +54,8 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $resultResponse->setData($plan);
+            $payment = Payment::findOrFail($id);
+            $resultResponse->setData($payment);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -65,21 +66,21 @@ class PlanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
         $resultResponse = new ResultResponse();
-
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $payment = Payment::findOrFail($id);
+            $payment->pg_nombre = $request->get('pg_nombre', $payment->pg_nombre);
+            $payment->pg_tipo = $request->get('pg_tipo', $payment->pg_tipo);
+            $payment->pg_fecha = $request->get('pg_fecha', $payment->pg_fecha);
+            $payment->pg_resplado = $request->get('pg_resplado', $payment->pg_resplado);
+            $payment->pg_monto = $request->get('pg_monto', $payment->pg_monto);
+            $payment->pg_sc_codigo = $request->get('pg_sc_codigo', $payment->pg_sc_codigo);
+            $payment->save();
+            $resultResponse->setData($payment);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -96,14 +97,15 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $payment = Payment::findOrFail($id);
+            $payment->pg_nombre = $request->get('pg_nombre', $payment->pg_nombre);
+            $payment->pg_tipo = $request->get('pg_tipo', $payment->pg_tipo);
+            $payment->pg_fecha = $request->get('pg_fecha', $payment->pg_fecha);
+            $payment->pg_resplado = $request->get('pg_resplado', $payment->pg_resplado);
+            $payment->pg_monto = $request->get('pg_monto', $payment->pg_monto);
+            $payment->pg_sc_codigo = $request->get('pg_sc_codigo', $payment->pg_sc_codigo);
+            $payment->save();
+            $resultResponse->setData($payment);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -120,9 +122,9 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->delete();
-            $resultResponse->setData($plan);
+            $payment = Payment::findOrFail($id);
+            $payment->delete();
+            $resultResponse->setData($payment);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {

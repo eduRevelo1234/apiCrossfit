@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
+use App\Models\Exercise;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 
-class PlanController extends Controller
+class ExerciseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $plan = Plan::all();
+        $exercise = Exercise::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($plan);
+        $resultResponse->setData($exercise);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -28,12 +28,8 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $newPlan = new Plan([
-                'pl_nombre' => $request->get('pl_nombre'),
-                'pl_numero_clase' => $request->get('pl_numero_clase'),
-                'pl_estado' => $request->get('pl_estado'),
-                'pl_costo_inscripcion' => $request->get('pl_costo_inscripcion'),
-                'pl_costo_mensual' => $request->get('pl_costo_mensual'),
+            $newPlan = new Exercise([
+                'ej_nombre' => $request->get('ej_nombre'),
             ]);
             $newPlan->save();
             $resultResponse->setData($newPlan);
@@ -53,8 +49,8 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $resultResponse->setData($plan);
+            $exercise = Exercise::findOrFail($id);
+            $resultResponse->setData($exercise);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -72,14 +68,10 @@ class PlanController extends Controller
         $resultResponse = new ResultResponse();
 
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $exercise = Exercise::findOrFail($id);
+            $exercise->ej_nombre = $request->get('ej_nombre', $exercise->ej_nombre);
+            $exercise->save();
+            $resultResponse->setData($exercise);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -96,14 +88,10 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $exercise = Exercise::findOrFail($id);
+            $exercise->ej_nombre = $request->get('ej_nombre', $exercise->ej_nombre);
+            $exercise->save();
+            $resultResponse->setData($exercise);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -120,9 +108,9 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->delete();
-            $resultResponse->setData($plan);
+            $exercise = Exercise::findOrFail($id);
+            $exercise->delete();
+            $resultResponse->setData($exercise);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {

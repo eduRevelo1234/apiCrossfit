@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
+use App\Models\Result;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 
-class PlanController extends Controller
+class ResultController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $plan = Plan::all();
+        $result = Result::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($plan);
+        $resultResponse->setData($result);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -28,12 +28,15 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $newPlan = new Plan([
-                'pl_nombre' => $request->get('pl_nombre'),
-                'pl_numero_clase' => $request->get('pl_numero_clase'),
-                'pl_estado' => $request->get('pl_estado'),
-                'pl_costo_inscripcion' => $request->get('pl_costo_inscripcion'),
-                'pl_costo_mensual' => $request->get('pl_costo_mensual'),
+            $newPlan = new Result([
+                'rl_fecha' => $request->get('rl_fecha'),
+                'rl_observacion' => $request->get('rl_observacion'),
+                'rl_rondas' => $request->get('rl_rondas'),
+                'rl_repeticion' => $request->get('rl_repeticion'),
+                'rl_peso' => $request->get('rl_peso'),
+                'rl_unidad' => $request->get('rl_unidad'),
+                'rl_us_codigo' => $request->get('rl_us_codigo'),
+                'rl_ej_codigo' => $request->get('rl_ej_codigo'),
             ]);
             $newPlan->save();
             $resultResponse->setData($newPlan);
@@ -53,8 +56,8 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $resultResponse->setData($plan);
+            $result = Result::findOrFail($id);
+            $resultResponse->setData($result);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -72,14 +75,17 @@ class PlanController extends Controller
         $resultResponse = new ResultResponse();
 
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $result = Result::findOrFail($id);
+            $result->rl_fecha = $request->get('rl_fecha', $result->rl_fecha);
+            $result->rl_observacion = $request->get('rl_observacion', $result->rl_observacion);
+            $result->rl_rondas = $request->get('rl_rondas', $result->rl_rondas);
+            $result->rl_repeticion = $request->get('rl_repeticion', $result->rl_repeticion);
+            $result->rl_peso = $request->get('rl_peso', $result->rl_peso);
+            $result->rl_unidad = $request->get('rl_unidad', $result->rl_unidad);
+            $result->rl_us_codigo = $request->get('rl_us_codigo', $result->rl_us_codigo);
+            $result->rl_ej_codigo = $request->get('rl_ej_codigo', $result->rl_ej_codigo);
+            $result->save();
+            $resultResponse->setData($result);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -96,14 +102,17 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $result = Result::findOrFail($id);
+            $result->rl_fecha = $request->get('rl_fecha', $result->rl_fecha);
+            $result->rl_observacion = $request->get('rl_observacion', $result->rl_observacion);
+            $result->rl_rondas = $request->get('rl_rondas', $result->rl_rondas);
+            $result->rl_repeticion = $request->get('rl_repeticion', $result->rl_repeticion);
+            $result->rl_peso = $request->get('rl_peso', $result->rl_peso);
+            $result->rl_unidad = $request->get('rl_unidad', $result->rl_unidad);
+            $result->rl_us_codigo = $request->get('rl_us_codigo', $result->rl_us_codigo);
+            $result->rl_ej_codigo = $request->get('rl_ej_codigo', $result->rl_ej_codigo);
+            $result->save();
+            $resultResponse->setData($result);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -120,9 +129,9 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->delete();
-            $resultResponse->setData($plan);
+            $result = Result::findOrFail($id);
+            $result->delete();
+            $resultResponse->setData($result);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {

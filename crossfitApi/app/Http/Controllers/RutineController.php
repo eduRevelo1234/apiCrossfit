@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rol;
+use App\Models\Rutine;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class RolController extends Controller
+class RutineController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $rol = Rol::all();
+        $rutine = Rutine::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($rol);
+        $resultResponse->setData($rutine);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -29,27 +26,25 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $resultResponse = new ResultResponse();
-        try {
-            // Validar los campos del request
-            $validation = $this->validateRolRequest($request);
-            if ($validation->fails()) {
-                $errors = $validation->errors()->all();
-                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-                $resultResponse->setMessage(implode(', ', $errors));
-            } else {
-                // Crear un nuevo rol solo si la validación es exitosa
-                $newRol = new Rol([
-                    'rl_nombre' => $request->input('name'),
-                    'rl_descripcion' => $request->input('description'),
+        $validation = $this->validateRutineRequest($request);
+        if ($validation->fails()) {
+            $errors = $validation->errors()->all();
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(implode(', ', $errors));
+        } else {
+            try {
+                $newRutine = new Rutine([
+                    'rt_nombre' => $request->get('rt_nombre'),
+                    'rt_descripcion' => $request->get('rt_descripcion'),
                 ]);
-                $newRol->save();
-                $resultResponse->setData($newRol);
+                $newRutine->save();
+                $resultResponse->setData($newRutine);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+            } catch (\Exception $e) {
+                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+                $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
             }
-        } catch (\Exception $e) {
-            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
         }
         return response()->json($resultResponse);
     }
@@ -60,15 +55,15 @@ class RolController extends Controller
     public function show($id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolId($id);
+        $validation = $this->validateRutineId($id);
         if ($validation->fails()) {
             $errors = $validation->errors()->all();
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(implode(', ', $errors));
         } else {
             try {
-                $rol = Rol::findOrFail($id);
-                $resultResponse->setData($rol);
+                $rutine = Rutine::findOrFail($id);
+                $resultResponse->setData($rutine);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
             } catch (\Exception $e) {
@@ -82,21 +77,21 @@ class RolController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function put(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolRequest($request);
+        $validation = $this->validateRutineRequest($request);
         if ($validation->fails()) {
             $errors = $validation->errors()->all();
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(implode(', ', $errors));
         } else {
             try {
-                $rol = Rol::findOrFail($id);
-                $rol->rl_nombre = $request->get('rl_nombre', $rol->rl_nombre);
-                $rol->rl_descripcion = $request->get('rl_descripcion', $rol->rl_descripcion);
-                $rol->save();
-                $resultResponse->setData($rol);
+                $rutine = Rutine::findOrFail($id);
+                $rutine->rt_nombre = $request->get('rt_nombre', $rutine->rt_nombre);
+                $rutine->rt_descripcion = $request->get('rt_descripcion', $rutine->rt_descripcion);
+                $rutine->save();
+                $resultResponse->setData($rutine);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
             } catch (\Exception $e) {
@@ -110,27 +105,20 @@ class RolController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function put(Request $request, $id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolRequest($request);
-        if ($validation->fails()) {
-            $errors = $validation->errors()->all();
+        try {
+            $rutine = Rutine::findOrFail($id);
+            $rutine->rt_nombre = $request->get('rt_nombre', $rutine->rt_nombre);
+            $rutine->rt_descripcion = $request->get('rt_descripcion', $rutine->rt_descripcion);
+            $rutine->save();
+            $resultResponse->setData($rutine);
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-            $resultResponse->setMessage(implode(', ', $errors));
-        } else {
-            try {
-                $rol = Rol::findOrFail($id);
-                $rol->rl_nombre = $request->get('rl_nombre', $rol->rl_nombre);
-                $rol->rl_descripcion = $request->get('rl_descripcion', $rol->rl_descripcion);
-                $rol->save();
-                $resultResponse->setData($rol);
-                $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
-                $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
-            } catch (\Exception $e) {
-                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-                $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
-            }
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
         }
         return response()->json($resultResponse);
     }
@@ -141,16 +129,16 @@ class RolController extends Controller
     public function destroy($id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolId($id);
+        $validation = $this->validateRutineId($id);
         if ($validation->fails()) {
             $errors = $validation->errors()->all();
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(implode(', ', $errors));
         } else {
             try {
-                $rol = Rol::findOrFail($id);
-                $rol->delete();
-                $resultResponse->setData($rol);
+                $rutine = Rutine::findOrFail($id);
+                $rutine->delete();
+                $resultResponse->setData($rutine);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
             } catch (\Exception $e) {
@@ -161,15 +149,16 @@ class RolController extends Controller
         return response()->json($resultResponse);
     }
 
-    private function validateRolRequest(Request $request)
+    private function validateRutineRequest(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:20',
-            'description' => 'nullable|string|max:255',
+            'rt_nombre' => 'nullable|string|max:255',
+            'rt_descripcion' => 'nullable|string|max:255',
         ];
         return Validator::make($request->all(), $rules);
     }
-    private function validateRolId($id)
+
+    private function validateRutineId($id)
     {
         return Validator::make(['id' => $id], [
             'id' => [

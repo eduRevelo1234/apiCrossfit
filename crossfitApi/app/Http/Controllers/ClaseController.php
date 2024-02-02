@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
+use App\Models\Clase;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 
-class PlanController extends Controller
+class ClaseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $plan = Plan::all();
+        $clase = Clase::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($plan);
+        $resultResponse->setData($clase);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -28,15 +28,16 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $newPlan = new Plan([
-                'pl_nombre' => $request->get('pl_nombre'),
-                'pl_numero_clase' => $request->get('pl_numero_clase'),
-                'pl_estado' => $request->get('pl_estado'),
-                'pl_costo_inscripcion' => $request->get('pl_costo_inscripcion'),
-                'pl_costo_mensual' => $request->get('pl_costo_mensual'),
+            $newClase = new Clase([
+                'cl_nombre' => $request->get('cl_nombre'),
+                'cl_fecha' => $request->get('cl_fecha'),
+                'cl_hora' => $request->get('cl_hora'),
+                'cl_maximo' => $request->get('cl_maximo'),
+                'cl_actual' => $request->get('cl_actual'),
+                'cl_rt_code' => $request->get('cl_rt_code'),
             ]);
-            $newPlan->save();
-            $resultResponse->setData($newPlan);
+            $newClase->save();
+            $resultResponse->setData($newClase);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -53,8 +54,8 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $resultResponse->setData($plan);
+            $clase = Clase::findOrFail($id);
+            $resultResponse->setData($clase);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -72,14 +73,15 @@ class PlanController extends Controller
         $resultResponse = new ResultResponse();
 
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $clase = Clase::findOrFail($id);
+            $clase->cl_nombre = $request->get('cl_nombre', $clase->cl_nombre);
+            $clase->cl_fecha = $request->get('cl_fecha', $clase->cl_fecha);
+            $clase->cl_hora = $request->get('cl_hora', $clase->cl_hora);
+            $clase->cl_maximo = $request->get('l_maximo', $clase->l_maximo);
+            $clase->cl_actual = $request->get('cl_actual', $clase->cl_actual);
+            $clase->cl_rt_code = $request->get('cl_rt_code', $clase->cl_rt_code);
+            $clase->save();
+            $resultResponse->setData($clase);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -96,14 +98,15 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $clase = Clase::findOrFail($id);
+            $clase->cl_nombre = $request->get('cl_nombre', $clase->cl_nombre);
+            $clase->cl_fecha = $request->get('cl_fecha', $clase->cl_fecha);
+            $clase->cl_hora = $request->get('cl_hora', $clase->cl_hora);
+            $clase->cl_maximo = $request->get('l_maximo', $clase->l_maximo);
+            $clase->cl_actual = $request->get('cl_actual', $clase->cl_actual);
+            $clase->cl_rt_code = $request->get('cl_rt_code', $clase->cl_rt_code);
+            $clase->save();
+            $resultResponse->setData($clase);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -120,9 +123,9 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->delete();
-            $resultResponse->setData($plan);
+            $clase = Clase::findOrFail($id);
+            $clase->delete();
+            $resultResponse->setData($clase);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {

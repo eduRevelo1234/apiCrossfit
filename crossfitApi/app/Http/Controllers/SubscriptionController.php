@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 
-class PlanController extends Controller
+class SubscriptionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $plan = Plan::all();
+        $subscription = Subscription::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($plan);
+        $resultResponse->setData($subscription);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -28,15 +28,17 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $newPlan = new Plan([
-                'pl_nombre' => $request->get('pl_nombre'),
-                'pl_numero_clase' => $request->get('pl_numero_clase'),
-                'pl_estado' => $request->get('pl_estado'),
-                'pl_costo_inscripcion' => $request->get('pl_costo_inscripcion'),
-                'pl_costo_mensual' => $request->get('pl_costo_mensual'),
+            $newSubscription = new Subscription([
+                'sc_finicio' => $request->get('sc_finicio'),
+                'sc_ffin' => $request->get('sc_ffin'),
+                'sc_estado' => $request->get('sc_estado'),
+                'sc_observacion' => $request->get('sc_observacion'),
+                'sc_periodo' => $request->get('sc_periodo'),
+                'sc_us_codigo' => $request->get('sc_us_codigo'),
+                'sc_pl_codigo' => $request->get('sc_pl_codigo'),
             ]);
-            $newPlan->save();
-            $resultResponse->setData($newPlan);
+            $newSubscription->save();
+            $resultResponse->setData($newSubscription);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -53,8 +55,8 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $resultResponse->setData($plan);
+            $subscription = Subscription::findOrFail($id);
+            $resultResponse->setData($subscription);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -65,21 +67,22 @@ class PlanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
         $resultResponse = new ResultResponse();
-
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $subscription = Subscription::findOrFail($id);
+            $subscription->sc_finicio = $request->get('sc_finicio', $subscription->sc_finicio);
+            $subscription->sc_ffin = $request->get('sc_ffin', $subscription->sc_ffin);
+            $subscription->sc_estado = $request->get('sc_estado', $subscription->sc_estado);
+            $subscription->sc_observacion = $request->get('sc_observacion', $subscription->sc_observacion);
+            $subscription->sc_periodo = $request->get('sc_periodo', $subscription->sc_periodo);
+            $subscription->sc_us_codigo = $request->get('sc_us_codigo', $subscription->sc_us_codigo);
+            $subscription->sc_pl_codigo = $request->get('sc_pl_codigo', $subscription->sc_pl_codigo);
+            $subscription->save();
+            $resultResponse->setData($subscription);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -96,14 +99,16 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->pl_nombre = $request->get('pl_nombre', $plan->pl_nombre);
-            $plan->pl_numero_clase = $request->get('pl_numero_clase', $plan->pl_numero_clase);
-            $plan->pl_estado = $request->get('pl_estado', $plan->pl_estado);
-            $plan->pl_costo_inscripcion = $request->get('pl_costo_inscripcion', $plan->pl_costo_inscripcion);
-            $plan->pl_costo_mensual = $request->get('pl_costo_mensual', $plan->pl_costo_mensual);
-            $plan->save();
-            $resultResponse->setData($plan);
+            $subscription = Subscription::findOrFail($id);
+            $subscription->sc_finicio = $request->get('sc_finicio', $subscription->sc_finicio);
+            $subscription->sc_ffin = $request->get('sc_ffin', $subscription->sc_ffin);
+            $subscription->sc_estado = $request->get('sc_estado', $subscription->sc_estado);
+            $subscription->sc_observacion = $request->get('sc_observacion', $subscription->sc_observacion);
+            $subscription->sc_periodo = $request->get('sc_periodo', $subscription->sc_periodo);
+            $subscription->sc_us_codigo = $request->get('sc_us_codigo', $subscription->sc_us_codigo);
+            $subscription->sc_pl_codigo = $request->get('sc_pl_codigo', $subscription->sc_pl_codigo);
+            $subscription->save();
+            $resultResponse->setData($subscription);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {
@@ -120,9 +125,9 @@ class PlanController extends Controller
     {
         $resultResponse = new ResultResponse();
         try {
-            $plan = Plan::findOrFail($id);
-            $plan->delete();
-            $resultResponse->setData($plan);
+            $subscription = Subscription::findOrFail($id);
+            $subscription->delete();
+            $resultResponse->setData($subscription);
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         } catch (\Exception $e) {

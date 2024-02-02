@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rol;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class RolController extends Controller
+
+class BookingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $rol = Rol::all();
+        $booking = Booking::all();
         $resultResponse = new ResultResponse();
-        $resultResponse->setData($rol);
+        $resultResponse->setData($booking);
         $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
         $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
         return response()->json($resultResponse);
@@ -29,46 +30,44 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $resultResponse = new ResultResponse();
-        try {
-            // Validar los campos del request
-            $validation = $this->validateRolRequest($request);
-            if ($validation->fails()) {
-                $errors = $validation->errors()->all();
-                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-                $resultResponse->setMessage(implode(', ', $errors));
-            } else {
-                // Crear un nuevo rol solo si la validación es exitosa
-                $newRol = new Rol([
-                    'rl_nombre' => $request->input('name'),
-                    'rl_descripcion' => $request->input('description'),
-                ]);
-                $newRol->save();
-                $resultResponse->setData($newRol);
-                $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
-                $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
-            }
-        } catch (\Exception $e) {
-            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
-        }
-        return response()->json($resultResponse);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $resultResponse = new ResultResponse();
-        $validation = $this->validateRolId($id);
+        $validation = $this->validateBooking($request);
         if ($validation->fails()) {
             $errors = $validation->errors()->all();
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(implode(', ', $errors));
         } else {
             try {
-                $rol = Rol::findOrFail($id);
-                $resultResponse->setData($rol);
+                $newPlan = new Booking([
+                    'rs_asistencia' => $request->get('rs_asistencia'),
+                    'rs_us_codigo' => $request->get('rs_us_codigo'),
+                    'rs_cl_codigo' => $request->get('rs_cl_codigo'),
+                ]);
+                $newPlan->save();
+                $resultResponse->setData($newPlan);
+                $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+                $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+            } catch (\Exception $e) {
+                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+                $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+            }
+        }
+        return response()->json($resultResponse);
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $resultResponse = new ResultResponse();
+        $validation = $this->bookingId($id);
+        if ($validation->fails()) {
+            $errors = $validation->errors()->all();
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(implode(', ', $errors));
+        } else {
+            try {
+                $booking = Booking::findOrFail($id);
+                $resultResponse->setData($booking);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
             } catch (\Exception $e) {
@@ -82,21 +81,22 @@ class RolController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function put(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolRequest($request);
+        $validation = $this->validateBooking($request);
         if ($validation->fails()) {
             $errors = $validation->errors()->all();
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(implode(', ', $errors));
         } else {
             try {
-                $rol = Rol::findOrFail($id);
-                $rol->rl_nombre = $request->get('rl_nombre', $rol->rl_nombre);
-                $rol->rl_descripcion = $request->get('rl_descripcion', $rol->rl_descripcion);
-                $rol->save();
-                $resultResponse->setData($rol);
+                $booking = Booking::findOrFail($id);
+                $booking->rs_asistencia = $request->get('rs_asistencia', $booking->rs_asistencia);
+                $booking->rs_us_codigo = $request->get('rs_us_codigo', $booking->rs_us_codigo);
+                $booking->rs_cl_codigo = $request->get('rs_cl_codigo', $booking->rs_cl_codigo);
+                $booking->save();
+                $resultResponse->setData($booking);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
             } catch (\Exception $e) {
@@ -110,27 +110,21 @@ class RolController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function put(Request $request, $id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolRequest($request);
-        if ($validation->fails()) {
-            $errors = $validation->errors()->all();
+        try {
+            $booking = Booking::findOrFail($id);
+            $booking->rs_asistencia = $request->get('rs_asistencia', $booking->rs_asistencia);
+            $booking->rs_us_codigo = $request->get('rs_us_codigo', $booking->rs_us_codigo);
+            $booking->rs_cl_codigo = $request->get('rs_cl_codigo', $booking->rs_cl_codigo);
+            $booking->save();
+            $resultResponse->setData($booking);
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-            $resultResponse->setMessage(implode(', ', $errors));
-        } else {
-            try {
-                $rol = Rol::findOrFail($id);
-                $rol->rl_nombre = $request->get('rl_nombre', $rol->rl_nombre);
-                $rol->rl_descripcion = $request->get('rl_descripcion', $rol->rl_descripcion);
-                $rol->save();
-                $resultResponse->setData($rol);
-                $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
-                $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
-            } catch (\Exception $e) {
-                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
-                $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
-            }
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
         }
         return response()->json($resultResponse);
     }
@@ -141,16 +135,16 @@ class RolController extends Controller
     public function destroy($id)
     {
         $resultResponse = new ResultResponse();
-        $validation = $this->validateRolId($id);
+        $validation = $this->bookingId($id);
         if ($validation->fails()) {
             $errors = $validation->errors()->all();
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(implode(', ', $errors));
         } else {
             try {
-                $rol = Rol::findOrFail($id);
-                $rol->delete();
-                $resultResponse->setData($rol);
+                $booking = Booking::findOrFail($id);
+                $booking->delete();
+                $resultResponse->setData($booking);
                 $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
                 $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
             } catch (\Exception $e) {
@@ -161,21 +155,22 @@ class RolController extends Controller
         return response()->json($resultResponse);
     }
 
-    private function validateRolRequest(Request $request)
+    private function validateBooking(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:20',
-            'description' => 'nullable|string|max:255',
+            'rs_asistencia' => ['required', 'string', 'max:10'],
+            'rs_us_codigo' => ['required', Rule::exists('users', 'id')],
+            'rs_cl_codigo' => ['required', Rule::exists('clases', 'id')],
         ];
         return Validator::make($request->all(), $rules);
     }
-    private function validateRolId($id)
+    private function bookingId($id)
     {
         return Validator::make(['id' => $id], [
             'id' => [
                 'required',
                 'integer',
-                Rule::exists('rutines', 'id'),
+                Rule::exists('bookings', 'id'),
             ],
         ]);
     }
