@@ -10,11 +10,10 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\RutineController;
 use App\Http\Controllers\UserController;
-use App\Models\Payment;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(RolController::class)->prefix('rol')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -24,6 +23,7 @@ Route::controller(RolController::class)->prefix('rol')->group(function () {
 });
 
 Route::controller(UserController::class)->prefix('user')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -33,6 +33,7 @@ Route::controller(UserController::class)->prefix('user')->group(function () {
 });
 
 Route::controller(PlanController::class)->prefix('plan')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -42,6 +43,7 @@ Route::controller(PlanController::class)->prefix('plan')->group(function () {
 });
 
 Route::controller(SubscriptionController::class)->prefix('subscription')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -51,6 +53,7 @@ Route::controller(SubscriptionController::class)->prefix('subscription')->group(
 });
 
 Route::controller(RutineController::class)->prefix('rutine')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -58,7 +61,9 @@ Route::controller(RutineController::class)->prefix('rutine')->group(function () 
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
 });
+
 Route::controller(ClaseController::class)->prefix('clase')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -66,7 +71,9 @@ Route::controller(ClaseController::class)->prefix('clase')->group(function () {
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
 });
+
 Route::controller(BookingController::class)->prefix('booking')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -74,7 +81,9 @@ Route::controller(BookingController::class)->prefix('booking')->group(function (
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
 });
+
 Route::controller(ExerciseController::class)->prefix('exercise')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -82,7 +91,9 @@ Route::controller(ExerciseController::class)->prefix('exercise')->group(function
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
 });
+
 Route::controller(ResultController::class)->prefix('result')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');
@@ -90,7 +101,9 @@ Route::controller(ResultController::class)->prefix('result')->group(function () 
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
 });
+
 Route::controller(PaymentController::class)->prefix('payment')->group(function () {
+    Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');
     Route::post('/{id}', 'update');

@@ -188,6 +188,35 @@ class UserController extends Controller
         return response()->json($resultResponse);
     }
 
+    public function search(Request $request)
+    {
+        $resultResponse = new ResultResponse();
+        try {
+            // Obtener todos los usuarios
+            $users = User::query();
+            // Aplicar búsqueda si se proporciona un término de búsqueda
+            if ($request->has('search_term')) {
+                $searchTerm = $request->input('search_term');
+                // Filtrar usuarios que coincidan con el término de búsqueda en cualquiera de los campos
+                $users->where('id', $searchTerm)
+                    ->orWhere(function ($query) use ($searchTerm) {
+                        $query->where('us_cedula', 'like', "%{$searchTerm}%")
+                            ->orWhere('us_nombre', 'like', "%{$searchTerm}%")
+                            ->orWhere('us_apellidos', 'like', "%{$searchTerm}%")
+                            // Agrega más campos aquí según sea necesario
+                            ->orWhere('us_sexo', 'like', "%{$searchTerm}%");
+                    });
+            }
+            $resultResponse->setData($users->get());
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+        }
+        return response()->json($resultResponse);
+    }
+
     private function validateRequest(Request $request)
     {
         $rules = [

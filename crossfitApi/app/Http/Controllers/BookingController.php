@@ -154,7 +154,35 @@ class BookingController extends Controller
         }
         return response()->json($resultResponse);
     }
+    public function search(Request $request)
+    {
+        $resultResponse = new ResultResponse();
+        try {
+            // Obtener todas las reservas
+            $bookings = Booking::all();
+            // Aplicar búsqueda si se proporciona un término de búsqueda
+            if ($request->has('search_term')) {
+                $searchTerm = strtolower($request->input('search_term'));
+                // Filtrar reservas que coincidan con el término de búsqueda en cualquiera de los campos
+                $bookings = $bookings->filter(function ($booking) use ($searchTerm) {
+                    foreach ($booking->toArray() as $field => $value) {
+                        if (is_string($value) && str_contains(strtolower($value), $searchTerm)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+            $resultResponse->setData($bookings);
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+        }
 
+        return response()->json($resultResponse);
+    }
     private function validateBooking(Request $request)
     {
         $rules = [

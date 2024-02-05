@@ -20,6 +20,7 @@ class RutineController extends Controller
         return response()->json($resultResponse);
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -146,6 +147,41 @@ class RutineController extends Controller
                 $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
             }
         }
+        return response()->json($resultResponse);
+    }
+
+    public function search(Request $request)
+    {
+        $resultResponse = new ResultResponse();
+
+        try {
+            // Obtener todas las rutinas
+            $rutines = Rutine::all();
+
+            // Aplicar búsqueda si se proporciona un término de búsqueda
+            if ($request->has('search_term')) {
+                $searchTerm = strtolower($request->input('search_term'));
+
+                // Filtrar rutinas que contengan el término de búsqueda en cualquiera de los campos
+                $rutines = $rutines->filter(function ($rutine) use ($searchTerm) {
+                    foreach ($rutine->getAttributes() as $field => $value) {
+                        // Considerar solo campos de cadena y realizar una búsqueda insensible a mayúsculas y minúsculas
+                        if (is_string($value) && str_contains(strtolower($value), $searchTerm)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+
+            $resultResponse->setData($rutines);
+            $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+        }
+
         return response()->json($resultResponse);
     }
 
