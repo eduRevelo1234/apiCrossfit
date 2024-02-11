@@ -23,6 +23,7 @@ Route::controller(RolController::class)->prefix('rol')->group(function () {
 });
 
 Route::controller(UserController::class)->prefix('user')->group(function () {
+    Route::post('/validate', 'validateLogIn');
     Route::get('/search', 'search');
     Route::get('/', 'index');
     Route::post('/', 'store');

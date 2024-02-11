@@ -39,8 +39,8 @@ class RolController extends Controller
             } else {
                 // Crear un nuevo rol solo si la validación es exitosa
                 $newRol = new Rol([
-                    'rl_nombre' => $request->input('name'),
-                    'rl_descripcion' => $request->input('description'),
+                    'rl_nombre' => $request->get('rl_nombre'),
+                    'rl_descripcion' => $request->get('rl_descripcion'),
                 ]);
                 $newRol->save();
                 $resultResponse->setData($newRol);
@@ -199,8 +199,8 @@ class RolController extends Controller
     private function validateRolRequest(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:20',
-            'description' => 'nullable|string|max:255',
+            'rl_nombre' => 'required|string|max:20',
+            'rl_descripcion' => 'nullable|string|max:255',
         ];
         return Validator::make($request->all(), $rules);
     }

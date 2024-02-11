@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Libs\ResultResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -203,13 +204,37 @@ class UserController extends Controller
                         $query->where('us_cedula', 'like', "%{$searchTerm}%")
                             ->orWhere('us_nombre', 'like', "%{$searchTerm}%")
                             ->orWhere('us_apellidos', 'like', "%{$searchTerm}%")
-                            // Agrega más campos aquí según sea necesario
-                            ->orWhere('us_sexo', 'like', "%{$searchTerm}%");
+                            ->orWhere('us_sexo', 'like', "%{$searchTerm}%")
+                            ->orWhere('us_email', 'like', "%{$searchTerm}%");
                     });
             }
             $resultResponse->setData($users->get());
             $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+        } catch (\Exception $e) {
+            $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+            $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
+        }
+        return response()->json($resultResponse);
+    }
+
+    public function validateLogIn(Request $request)
+    {
+        $resultResponse = new ResultResponse();
+        try {
+            $validation = $this->validateRequestCredentials($request);
+
+            if ($validation->fails()) {
+                $errors = $validation->errors()->all();
+                $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
+                $resultResponse->setMessage(implode(', ', $errors));
+            } else {
+                $mail = $request->input('us_email');
+                $password = $request->input('us_contraseña');
+                $resultResponse->setData($this->validateCredentials($mail, $password));
+                $resultResponse->setStatusCode(ResultResponse::SUCCESS_CODE);
+                $resultResponse->setMessage(ResultResponse::TXT_SUCCESS_CODE);
+            }
         } catch (\Exception $e) {
             $resultResponse->setStatusCode(ResultResponse::ERROR_CODE);
             $resultResponse->setMessage(ResultResponse::TXT_ERROR_CODE);
@@ -246,5 +271,22 @@ class UserController extends Controller
                 Rule::exists('users', 'id'),
             ],
         ]);
+    }
+    private function validateCredentials($mail, $password)
+    {
+        $user = User::where('us_email', $mail)->first();
+        if ($user && $user->us_contraseña === $password) {
+            return true;
+        }
+        return false;
+    }
+
+    private function validateRequestCredentials(Request $request)
+    {
+        $rules = [
+            'us_email' => 'required|email|max:255',
+            'us_contraseña' => 'required|string|max:8',
+        ];
+        return Validator::make($request->all(), $rules);
     }
 }
