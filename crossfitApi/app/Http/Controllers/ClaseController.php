@@ -206,7 +206,7 @@ class ClaseController extends Controller
             'cl_hora' => 'nullable|date_format:H:i:s',
             'cl_maximo' => 'nullable|integer',
             'cl_actual' => 'nullable|integer',
-            'cl_rt_code' => ['required', 'integer', Rule::exists('routines', 'id')],
+            'cl_rt_code' => ['required', 'integer', Rule::exists('rutines', 'id')],
         ];
         return Validator::make($request->all(), $rules);
     }
